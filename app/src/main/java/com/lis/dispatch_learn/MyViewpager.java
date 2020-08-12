@@ -39,10 +39,22 @@ public class MyViewpager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            super.onInterceptTouchEvent(ev);
-            return false;
+        int x = (int) ev.getX();
+        int y = (int) ev.getY();
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+               mLastX= (int) ev.getX();
+               mLastY= (int) ev.getY();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                int deltaX = x - mLastX;
+                int deltaY = y - mLastY;
+                if (Math.abs(deltaX) > Math.abs(deltaY)) { //左右滑
+                    return true;
+                }
+                break;
         }
-        return true;
+        return super.onInterceptTouchEvent(ev);
     }
 }
